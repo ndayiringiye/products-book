@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { 
   ArrowUpRight, 
   FileText, 
@@ -8,7 +9,6 @@ import {
   MessageCircle,
   FileArchive
 } from 'lucide-react';
-import { useState } from 'react';
 
 export default function BitAppsDashboard() {
   const [activeTab, setActiveTab] = useState('Products');
@@ -99,24 +99,28 @@ export default function BitAppsDashboard() {
     { name: 'Email us', icon: <Mail size={18} /> }
   ];
 
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
-    <div className="bg-amber-50 min-h-screen p-4 flex justify-center items-center">
-      <div className="w-full max-w-6xl flex gap-5">
-      
-        {/* Main Content */}
-        <div className="bg-gray-900 rounded-xl p-5 flex-grow text-white">
-          {/* Navigation */}
-          <div className="flex justify-between items-center mb-6">
+    <div className="bg-amber-50 min-h-screen p-2 md:p-4 flex justify-center items-center">
+      <div className="w-full max-w-6xl flex flex-col lg:flex-row gap-3 md:gap-5">
+        <div className="bg-gray-900 rounded-xl p-3 md:p-5 flex-grow text-white">
+          <div className="flex flex-col sm:flex-row justify-between items-center mb-4 md:mb-6 gap-3">
             <div className="flex items-center">
-              <span className="text-red-500 text-2xl font-bold mr-1">Bit</span>
-              <span className="text-white text-2xl font-bold">Apps</span>
+              <span className="text-red-500 text-xl md:text-2xl font-bold mr-1">Bit</span>
+              <span className="text-white text-xl md:text-2xl font-bold">Apps</span>
             </div>
-            
-            <div className="flex items-center space-x-4">
+            <button 
+              className="sm:hidden bg-gray-800 p-2 rounded-md text-white"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              Menu
+            </button>
+            <div className="hidden sm:flex items-center space-x-2 md:space-x-4">
               {navItems.map(item => (
                 <button 
                   key={item}
-                  className={`text-sm ${activeTab === item ? 'text-white' : 'text-gray-400'}`}
+                  className={`text-xs md:text-sm ${activeTab === item ? 'text-white' : 'text-gray-400'}`}
                   onClick={() => setActiveTab(item)}
                 >
                   {item}
@@ -124,21 +128,40 @@ export default function BitAppsDashboard() {
               ))}
             </div>
             
-            <button className="bg-gray-800 hover:bg-gray-700 text-white text-sm py-1 px-4 rounded-full">
+            <button className="hidden sm:block bg-gray-800 hover:bg-gray-700 text-white text-xs md:text-sm py-1 px-3 md:px-4 rounded-full">
               Sign in
             </button>
           </div>
-          
-          {/* Product Grid */}
-          <div className="grid grid-cols-3 gap-4">
+          {mobileMenuOpen && (
+            <div className="sm:hidden mb-4 bg-gray-800 rounded-lg p-3">
+              <div className="flex flex-col space-y-2">
+                {navItems.map(item => (
+                  <button 
+                    key={item}
+                    className={`text-sm py-2 px-3 rounded-md ${activeTab === item ? 'bg-gray-700 text-white' : 'text-gray-400'}`}
+                    onClick={() => {
+                      setActiveTab(item);
+                      setMobileMenuOpen(false);
+                    }}
+                  >
+                    {item}
+                  </button>
+                ))}
+                <button className="bg-gray-700 text-white text-sm py-2 px-3 rounded-md mt-2">
+                  Sign in
+                </button>
+              </div>
+            </div>
+          )}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
             {products.map(product => (
-              <div key={product.id} className="bg-gray-800 rounded-lg p-4 flex flex-col">
+              <div key={product.id} className="bg-gray-800 rounded-lg p-3 md:p-4 flex flex-col">
                 <div className="flex justify-between mb-2">
                   <div className="flex items-center gap-2">
                     {product.icon}
                     <div>
-                      <div className="flex items-center">
-                        <span className="font-medium text-sm">{product.name}</span>
+                      <div className="flex items-center flex-wrap">
+                        <span className="font-medium text-xs md:text-sm">{product.name}</span>
                         {product.isNew && (
                           <span className="ml-2 bg-pink-600 text-white text-xs px-2 py-0.5 rounded">NEW</span>
                         )}
@@ -152,18 +175,16 @@ export default function BitAppsDashboard() {
                 <p className="text-gray-400 text-xs">{product.description}</p>
               </div>
             ))}
-            
-            {/* Bit Hub Promo */}
-            <div className="col-span-1 bg-purple-700 rounded-lg p-4 flex flex-col relative">
+            <div className="col-span-1 bg-purple-700 rounded-lg p-3 md:p-4 flex flex-col relative">
               <div className="flex justify-between items-start">
                 <div>
-                  <div className="text-sm mb-2">Explore</div>
+                  <div className="text-xs md:text-sm mb-2">Explore</div>
                   <div className="flex items-center">
                     <span className="text-red-500 font-bold">Bit</span>
                     <span className="font-bold"> Hub</span>
                   </div>
                   
-                  <div className="flex mt-4 gap-2">
+                  <div className="flex mt-3 md:mt-4 gap-2">
                     <div className="bg-gray-800 p-1 rounded">
                       <div className="bg-red-500 p-1 rounded text-xs">B</div>
                     </div>
@@ -181,25 +202,23 @@ export default function BitAppsDashboard() {
                   <img 
                     src="/api/placeholder/100/100" 
                     alt="Cartoon character" 
-                    className="w-20 h-20" 
+                    className="w-16 h-16 md:w-20 md:h-20" 
                   />
                 </div>
               </div>
             </div>
           </div>
         </div>
-        
-        {/* Sidebar */}
-        <div className="bg-gray-900 rounded-xl p-4 w-64 text-white">
-          <div className="space-y-4">
+        <div className="bg-gray-900 rounded-xl p-3 md:p-4 w-full lg:w-64 text-white">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-1 gap-3 md:gap-4">
             {sidebarItems.map((item, index) => (
               <div key={index} className="flex items-center p-2 hover:bg-gray-800 rounded-lg cursor-pointer">
-                <div className={`${index === 0 ? 'bg-green-600' : index === 1 ? 'bg-blue-600' : index === 2 ? 'bg-red-500' : index === 3 ? 'bg-green-600' : index === 4 ? 'bg-blue-600' : 'bg-amber-500'} p-2 rounded mr-3`}>
+                <div className={`${index === 0 ? 'bg-green-600' : index === 1 ? 'bg-blue-600' : index === 2 ? 'bg-red-500' : index === 3 ? 'bg-green-600' : index === 4 ? 'bg-blue-600' : 'bg-amber-500'} p-2 rounded mr-2 md:mr-3`}>
                   {item.icon}
                 </div>
-                <div>
-                  <div className="text-sm font-medium">{item.name}</div>
-                  <div className="text-gray-400 text-xs">This is a blog section filler text.</div>
+                <div className="overflow-hidden">
+                  <div className="text-xs md:text-sm font-medium truncate">{item.name}</div>
+                  <div className="text-gray-400 text-xs truncate hidden md:block lg:block">This is a blog section filler text.</div>
                 </div>
               </div>
             ))}
