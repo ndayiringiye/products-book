@@ -1,8 +1,11 @@
 import React from 'react'
+import BitAppsDashboard from './Componets/Dashboard'
 
 const App = () => {
   return (
-    <div>App</div>
+    <div>
+      <BitAppsDashboard />
+    </div>
   )
 }
 
